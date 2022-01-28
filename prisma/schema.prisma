@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cities {
+  id                Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  state           String   @db.Char(2)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+
+  @@map("cities")
+  Customers Customers[]
+}
+
+model Customers {
+  id                Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  gender        String   @db.Char(1)
+  birth_date  DateTime? @db.Date
+  age               Int?  
+  city_id         Int?
+  city              Cities?   @relation(fields: [city_id], references: [id])
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+
+  @@map("customers")
+}
